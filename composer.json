@@ -1,0 +1,13 @@
+{
+    "name": "crodas/path",
+    "description": "Library to manipulate paths",
+    "authors": [
+        {
+            "name": "César D. Rodas",
+            "email": "crodas@php.net"
+        }
+    ],
+    "require": {
+
+    }
+}
