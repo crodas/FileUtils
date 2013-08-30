@@ -8,8 +8,10 @@
         }
     ],
     "license": "BSD-4-Clause",
-    "version": "v0.1.0",
-    "require": {
-
+    "version": "v0.1.1",
+    "autoload": {
+        "psr-0": {
+            "crodas": "lib/"
+        }
     }
 }
