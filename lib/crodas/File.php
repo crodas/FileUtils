@@ -47,11 +47,14 @@ class File
             throw new \RuntimeException("Failed to write temporary file ({$tmp})");
         }
 
+        $path = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $path);
+
         if (is_file($path)) {
             if (!unlink($path)) {
                 throw new \RuntimeException("Failed to remove old file");
             }
         }
+
 
         if (!rename($tmp, $path)) {
             throw new \RuntimeException("Failed to move temporary file");
