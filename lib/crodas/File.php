@@ -64,6 +64,12 @@ class File
             chmod($path, $perm);
         }
 
+        if (is_callable('opcache_invalidate')) {
+            opcache_invalidate($path, true);
+        } else if (is_callable('apc_clear_cache')) {
+            apc_clear_cache();
+        }
+
         return true;
     }
 }
