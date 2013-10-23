@@ -92,6 +92,10 @@ class Path
             $rpath .= $slash . $file;
         }
 
+        if (DIRECTORY_SEPARATOR == "\\") {
+            $rpath = addslashes($rpath);
+        }
+
         return $rpath;
     }
 }
