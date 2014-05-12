@@ -35,7 +35,7 @@
   +---------------------------------------------------------------------------------+
 */
 
-namespace crodas;
+namespace crodas\FileUtil;
 
 class File
 {
