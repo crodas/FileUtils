@@ -1,6 +1,6 @@
 {
-    "name": "crodas/path",
-    "description": "Library to manipulate paths",
+    "name": "crodas/file-utils",
+    "description": "Useful libraries to manipulate files",
     "authors": [
         {
             "name": "César D. Rodas",
