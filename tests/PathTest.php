@@ -1,6 +1,6 @@
 <?php
 
-use crodas\Path;
+use crodas\FileUtil\Path;
 
 class PathTest extends \phpunit_framework_testcase
 {

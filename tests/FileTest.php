@@ -1,6 +1,6 @@
 <?php
 
-use crodas\File;
+use crodas\FileUtil\File;
 
 class FileTest extends \phpunit_framework_testcase
 {
