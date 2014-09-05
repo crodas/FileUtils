@@ -43,9 +43,20 @@ class Cache
     protected $content = false;
     protected $is_listening = false;
 
+    protected static $dir = '';
+
+    public static function setDirectory($dir)
+    {
+        self::$dir = $dir;
+    }
+
     public function __construct($file, $object)
     {
-        $this->file   = $file;
+        if (self::$dir == '') {
+            self::$dir = sys_get_temp_dir() . '/php-cache-';
+        }
+
+        $this->file   = $file[0] == '/'  || $file[0] == '.' ? $file : self::$dir . $file;
         $this->object = is_string($object) ? new $object : $object;
     }
 
