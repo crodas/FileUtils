@@ -68,7 +68,7 @@ class Cache
     public function __destruct()
     {
         if ($this->is_listening) {
-            File::write($this->file, '<?php return ' . var_export($this->content, true) . ';'); 
+            File::dumpArray($this->file, $this->content);
         }
     }
 
