@@ -37,13 +37,14 @@
 
 namespace crodas\FileUtil;
 
-function dump_array(Array $data)
+function dump_array(Array $data, $short = null)
 {
-    $php = "array(";
+    $short = $short === null ? version_compare(File::$minPHP ?: PHP_VERSION, '5.4.0', '>=') : $short;
+    $php   = $short ? "[" : "array(";
     foreach ($data as $key => $value) {
         $php .= var_export($key, true) . "=>";
         if (is_array($value)) {
-            $php .= dump_array($value);
+            $php .= dump_array($value, $short);
         } else if(is_float($value)) {
             $php .= number_format($value, 2);
         } else {
@@ -51,12 +52,14 @@ function dump_array(Array $data)
         }
         $php .= ",";
     }
-    $php .= ")";
+    $php = substr($php, 0, -1) . ($short ? "]": ")");
     return $php;
 }
 
 class File
 {
+    public static $minPHP;
+
     /**
      *  Dump array into a file. Similar to *var_dump* but the result
      *  is not human readable (reduces space by a third in large arrays)
