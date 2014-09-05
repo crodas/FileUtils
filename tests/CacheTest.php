@@ -44,7 +44,7 @@ class CacheTest extends \phpunit_framework_testcase
     {
         $proxy = new Cache('foobar.php', new fooClass);
         $this->assertEquals($proxy->foobar(1, 2, 3), $proxy->foobar(1, 2, 3));
-        unset($proxy);
+        unset($proxy); /* destroy object to write the cache file */
         $this->assertTrue(is_file(sys_get_temp_dir() . '/php-cache-foobar.php'));
     }
 }

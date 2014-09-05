@@ -1,7 +1,7 @@
 <?php
 /*
   +---------------------------------------------------------------------------------+
-  | Copyright (c) 2013 César Rodas                                                  |
+  | Copyright (c) 2014 César Rodas                                                  |
   +---------------------------------------------------------------------------------+
   | Redistribution and use in source and binary forms, with or without              |
   | modification, are permitted provided that the following conditions are met:     |
@@ -37,8 +37,35 @@
 
 namespace crodas\FileUtil;
 
+function dump_array(Array $data)
+{
+    $php = "array(";
+    foreach ($data as $key => $value) {
+        $php .= var_export($key, true) . "=>";
+        if (is_array($value)) {
+            $php .= dump_array($value);
+        } else if(is_float($value)) {
+            $php .= number_format($value, 2);
+        } else {
+            $php .= var_export($value, true);
+        }
+        $php .= ",";
+    }
+    $php .= ")";
+    return $php;
+}
+
 class File
 {
+    /**
+     *  Dump array into a file. Similar to *var_dump* but the result
+     *  is not human readable (reduces space by a third in large arrays)
+     */
+    public static function dumpArray($path, Array $data, $perm = 0644)
+    {
+        self::write($path, "<?php return " . dump_array($data) . ';', $perm);
+    }
+
     public static function write($path, $content, $perm = 0644)
     {
         $dir = dirname($path);
