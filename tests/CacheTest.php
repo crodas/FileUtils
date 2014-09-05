@@ -11,7 +11,7 @@ class fooClass
     {
         global $foo, $counter;
         $counter++;
-        return [$foo, rand(), rand()];
+        return array($foo, rand(), rand());
     }
 }
 
@@ -26,7 +26,8 @@ class CacheTest extends \phpunit_framework_testcase
         $proxy = new Cache(FILE, 'fooClass');
         $this->assertEquals($proxy->foobar(1, 2, 3), $proxy->foobar(1, 2, 3));
         $this->assertEquals($proxy->foobar(1, 2, 3), $proxy->foobar(1, 2, 3));
-        $this->assertEquals($proxy->foobar(1, 2, 3)[0], $foo);
+        $x = $proxy->foobar(1, 2, 3);
+        $this->assertEquals($x[0], $foo);
         $this->assertEquals($counter, 1);
         unset($proxy);
     }

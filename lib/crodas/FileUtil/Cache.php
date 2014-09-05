@@ -68,7 +68,7 @@ class Cache
     public function __destruct()
     {
         if ($this->is_listening) {
-            File::write($this->file, '<?php return ' . var_export($this->content, true) . ';'); 
+            File::dumpArray($this->file, $this->content);
         }
     }
 
@@ -81,7 +81,7 @@ class Cache
         $name = serialize($args);
 
         if (empty($this->content[$method][$name])) {
-            $this->content[$method][$name] = call_user_func_array([$this->object, $method], $args);
+            $this->content[$method][$name] = call_user_func_array(array($this->object, $method), $args);
             $this->is_listening = true;
         }
 
