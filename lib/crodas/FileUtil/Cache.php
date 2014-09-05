@@ -81,7 +81,7 @@ class Cache
         $name = serialize($args);
 
         if (empty($this->content[$method][$name])) {
-            $this->content[$method][$name] = call_user_func_array([$this->object, $method], $args);
+            $this->content[$method][$name] = call_user_func_array(array($this->object, $method), $args);
             $this->is_listening = true;
         }
 
