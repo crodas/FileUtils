@@ -7,7 +7,7 @@ class FileTest extends \phpunit_framework_testcase
     public function testDumpArray()
     {
         $this->assertFalse(is_file('foobar.php'));
-        $data = ['foo' => rand()];
+        $data = array('foo' => rand());
         File::dumpArray("foobar.php", $data);
         $this->assertTrue(is_file('foobar.php'));
         $this->assertEquals($data, require 'foobar.php');
