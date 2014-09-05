@@ -11,7 +11,7 @@ class fooClass
     {
         global $foo, $counter;
         $counter++;
-        return [$foo, rand(), rand()];
+        return array($foo, rand(), rand());
     }
 }
 
