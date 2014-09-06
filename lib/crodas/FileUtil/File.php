@@ -52,7 +52,10 @@ function dump_array(Array $data, $short = null)
         }
         $php .= ",";
     }
-    $php = substr($php, 0, -1) . ($short ? "]": ")");
+    if (substr($php,-1) == ',') {
+        $php = substr($php, 0, -1);
+    } 
+    $php .= $short ? "]": ")";
     return $php;
 }
 
