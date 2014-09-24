@@ -75,6 +75,12 @@ class File
     public static function write($path, $content, $perm = 0644)
     {
         $dir = dirname($path);
+        if (!is_dir($dir)) {
+            if (!mkdir($dir)) {
+                throw new \RuntimeException("Cannot create directory {$dir}");
+            }
+        }
+
         $tmp = tempnam($dir, "crodas_file_");
         if (file_put_contents($tmp, $content) === false) {
             throw new \RuntimeException("Failed to write temporary file ({$tmp})");
@@ -87,7 +93,6 @@ class File
                 throw new \RuntimeException("Failed to remove old file");
             }
         }
-
 
         if (!rename($tmp, $path)) {
             throw new \RuntimeException("Failed to move temporary file");
