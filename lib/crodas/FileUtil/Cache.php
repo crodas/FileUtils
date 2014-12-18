@@ -63,7 +63,7 @@ class Cache
     public function __construct($object, $file = '')
     {
         if (empty($file)) {
-            $file = File::generateFilepath('class_cache', $object);
+            $file = File::generateFilepath('class_cache', is_string($object) ? $object : get_class($object));
         } else {
             if (self::$dir == '') {
                 self::$dir = sys_get_temp_dir() . '/php-cache-';

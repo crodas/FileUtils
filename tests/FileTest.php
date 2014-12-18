@@ -26,7 +26,7 @@ class FileTest extends \phpunit_framework_testcase
     {
         $path = File::generateFilepath('activemongo');
 
-        $this->assertTrue(preg_match("@" . DIRECTORY_SEPARATOR . "activemongo_@", $path) > 0);
+        $this->assertTrue(preg_match("@" . DIRECTORY_SEPARATOR . "activemongo" . DIRECTORY_SEPARATOR . "@", $path) > 0);
         touch($path);
         $this->assertTrue(is_writable($path));
 

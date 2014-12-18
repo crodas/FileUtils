@@ -126,6 +126,14 @@ class File
             throw new \RuntimeException("You would need to give us at least one identifier");
         }
 
-        return sys_get_temp_dir() . DIRECTORY_SEPARATOR . $args[0] . "_" . sha1(implode("\0", $args));
+        $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $args[0] . DIRECTORY_SEPARATOR;
+
+        if (!is_dir($dir)) {
+            if (!mkdir($dir, 0777, true)) {
+                throw new \RuntimeException("cannot create directory $dir");
+            }
+        }
+
+        return $dir . sha1(implode("\0", $args));
     }
 }
