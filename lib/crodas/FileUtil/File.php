@@ -110,4 +110,22 @@ class File
 
         return true;
     }
+
+    /**
+     *  Given a few identifier (1 or more) it would return 
+     *  a filepath that can be used consistently among requets
+     *  and it is safely stored in the temp directory of the OS 
+     *
+     *  @return string
+     */
+    public static function generateFilepath()
+    {
+        $args = func_get_args();
+
+        if (empty($args)) {
+            throw new \RuntimeException("You would need to give us at least one identifier");
+        }
+
+        return sys_get_temp_dir() . DIRECTORY_SEPARATOR . $args[0] . "_" . sha1(implode("\0", $args));
+    }
 }

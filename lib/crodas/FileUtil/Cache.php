@@ -36,6 +36,16 @@
 */
 namespace crodas\FileUtil;
 
+/**
+ *  Cache Class file
+ *
+ *  This class is a wrapper class that would make
+ *  easier the task of making object lives among requets (make
+ *  them persistent).
+ *  
+ *  The class is serialized to disk and constructed properly
+ *  the next time.
+ */
 class Cache
 {
     protected $file;
@@ -50,10 +60,14 @@ class Cache
         self::$dir = $dir;
     }
 
-    public function __construct($file, $object)
+    public function __construct($object, $file = '')
     {
-        if (self::$dir == '') {
-            self::$dir = sys_get_temp_dir() . '/php-cache-';
+        if (empty($file)) {
+            $file = File::generateFilepath('class_cache', $object);
+        } else {
+            if (self::$dir == '') {
+                self::$dir = sys_get_temp_dir() . '/php-cache-';
+            }
         }
 
         $this->file   = $file[0] == '/'  || $file[0] == '.' ? $file : self::$dir . $file;

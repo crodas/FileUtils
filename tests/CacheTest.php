@@ -23,7 +23,7 @@ class CacheTest extends \phpunit_framework_testcase
     {
         global $foo, $counter;
         @unlink(FILE);
-        $proxy = new Cache(FILE, 'fooClass');
+        $proxy = new Cache('fooClass', FILE);
         $this->assertEquals($proxy->foobar(1, 2, 3), $proxy->foobar(1, 2, 3));
         $this->assertEquals($proxy->foobar(1, 2, 3), $proxy->foobar(1, 2, 3));
         $x = $proxy->foobar(1, 2, 3);
@@ -36,14 +36,14 @@ class CacheTest extends \phpunit_framework_testcase
     public function testSecond()
     {
         global $foo, $counter;
-        $proxy = new Cache(FILE, 'fooClass');
+        $proxy = new Cache('fooClass', FILE);
         $this->assertEquals($proxy->foobar(1, 2, 3), $proxy->foobar(1, 2, 3));
         $this->assertEquals($counter, 1);
     }
 
     public function testPrefix()
     {
-        $proxy = new Cache('foobar.php', new fooClass);
+        $proxy = new Cache(new fooClass, 'foobar.php');
         $this->assertEquals($proxy->foobar(1, 2, 3), $proxy->foobar(1, 2, 3));
         unset($proxy); /* destroy object to write the cache file */
         $this->assertTrue(is_file(sys_get_temp_dir() . '/php-cache-foobar.php'));
