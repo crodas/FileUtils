@@ -62,6 +62,7 @@ function dump_array(Array $data, $short = null)
 class File
 {
     public static $minPHP;
+    protected static $gen;
 
     /**
      *  Dump array into a file. Similar to *var_dump* but the result
@@ -126,7 +127,8 @@ class File
             throw new \RuntimeException("You would need to give us at least one identifier");
         }
 
-        $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $args[0] . DIRECTORY_SEPARATOR;
+        $gen = self::$gen;
+        $dir = $gen($args[0]);
 
         if (!is_dir($dir)) {
             if (!mkdir($dir, 0777, true)) {
@@ -136,4 +138,17 @@ class File
 
         return $dir . sha1(implode("\0", $args));
     }
+
+    public static function overrideFilepathGenerator($fnc)
+    {
+        if (!is_callable($fnc)) {
+            throw new \InvalidArgumentException("Expecting a callable");
+        }
+
+        self::$gen = $fnc;
+    }
 }
+
+File::overrideFilepathGenerator(function($prefix) {
+    return sys_get_temp_dir() . DIRECTORY_SEPARATOR . $prefix . DIRECTORY_SEPARATOR;
+});
