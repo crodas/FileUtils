@@ -21,7 +21,10 @@ class CacheTest extends \phpunit_framework_testcase
     public function testFirst()
     {
         global $foo, $counter;
-        unlink(File::generateFilepath('class_cache', 'fooClass'));
+        $file = File::generateFilepath('class_cache', 'fooClass');
+        if (is_file($file)) {
+            unlink($file);
+        }
         $proxy = new Cache('fooClass');
         $this->assertEquals($proxy->foobar(1, 2, 3), $proxy->foobar(1, 2, 3));
         $this->assertEquals($proxy->foobar(1, 2, 3), $proxy->foobar(1, 2, 3));
