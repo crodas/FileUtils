@@ -138,7 +138,7 @@ class File
 
         $path = $dir . sha1(implode("\0", $args));
         
-        if (!is_file($path);
+        if (!is_file($path)) {
             File::write($path, '');
         }
 
