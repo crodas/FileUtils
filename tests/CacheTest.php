@@ -1,6 +1,7 @@
 <?php
 
 use crodas\FileUtil\Cache;
+use crodas\FileUtil\File;
 
 $foo = rand();
 $counter = 0;
@@ -15,15 +16,16 @@ class fooClass
     }
 }
 
-define('FILE', __DIR__ . '/foo.php');
-
 class CacheTest extends \phpunit_framework_testcase
 {
     public function testFirst()
     {
         global $foo, $counter;
-        @unlink(FILE);
-        $proxy = new Cache(FILE, 'fooClass');
+        $file = File::generateFilepath('class_cache', 'fooClass');
+        if (is_file($file)) {
+            unlink($file);
+        }
+        $proxy = new Cache('fooClass');
         $this->assertEquals($proxy->foobar(1, 2, 3), $proxy->foobar(1, 2, 3));
         $this->assertEquals($proxy->foobar(1, 2, 3), $proxy->foobar(1, 2, 3));
         $x = $proxy->foobar(1, 2, 3);
@@ -36,14 +38,14 @@ class CacheTest extends \phpunit_framework_testcase
     public function testSecond()
     {
         global $foo, $counter;
-        $proxy = new Cache(FILE, 'fooClass');
+        $proxy = new Cache('fooClass');
         $this->assertEquals($proxy->foobar(1, 2, 3), $proxy->foobar(1, 2, 3));
         $this->assertEquals($counter, 1);
     }
 
     public function testPrefix()
     {
-        $proxy = new Cache('foobar.php', new fooClass);
+        $proxy = new Cache(new fooClass, 'foobar.php');
         $this->assertEquals($proxy->foobar(1, 2, 3), $proxy->foobar(1, 2, 3));
         unset($proxy); /* destroy object to write the cache file */
         $this->assertTrue(is_file(sys_get_temp_dir() . '/php-cache-foobar.php'));

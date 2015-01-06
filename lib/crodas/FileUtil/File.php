@@ -62,6 +62,7 @@ function dump_array(Array $data, $short = null)
 class File
 {
     public static $minPHP;
+    protected static $gen;
 
     /**
      *  Dump array into a file. Similar to *var_dump* but the result
@@ -110,4 +111,51 @@ class File
 
         return true;
     }
+
+    /**
+     *  Given a few identifier (1 or more) it would return 
+     *  a filepath that can be used consistently among requets
+     *  and it is safely stored in the temp directory of the OS 
+     *
+     *  @return string
+     */
+    public static function generateFilepath()
+    {
+        $args = func_get_args();
+
+        if (empty($args)) {
+            throw new \RuntimeException("You would need to give us at least one identifier");
+        }
+
+        $gen = self::$gen;
+        $dir = $gen($args[0]);
+
+        if (!is_dir($dir)) {
+            if (!mkdir($dir, 0777, true)) {
+                throw new \RuntimeException("cannot create directory $dir");
+            }
+        }
+
+        $path = $dir . sha1(implode("\0", $args));
+        
+        if (!is_file($path);
+            File::write($path, '');
+        }
+
+
+        return $path;
+    }
+
+    public static function overrideFilepathGenerator($fnc)
+    {
+        if (!is_callable($fnc)) {
+            throw new \InvalidArgumentException("Expecting a callable");
+        }
+
+        self::$gen = $fnc;
+    }
 }
+
+File::overrideFilepathGenerator(function($prefix) {
+    return sys_get_temp_dir() . DIRECTORY_SEPARATOR . $prefix . DIRECTORY_SEPARATOR;
+});
