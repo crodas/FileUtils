@@ -41,14 +41,17 @@ class Path
 {
     public static function normalize($path)
     {
-        if (file_exists($path)) {
-            return realpath($path);
+        $rpath  = realpath($path);
+        if ($rpath) {
+            return $rpath;
         }
         $path  = str_replace("\\", "/", trim($path));
-        $abs   = $path[0] == "/";
-        $win   = preg_match("@[A-Z]:/@i", $path);
-        if (!$abs && !$win) {
+        preg_match("@([A-Z]+:)?/+@i", $path, $scheme);
+        $scheme = $scheme[0];
+        if (!$scheme) {
             $path = getcwd() . '/' . $path;
+        } else {
+            $path = substr($path, strlen($scheme));
         }
         $parts = array_values(array_filter(explode("/", $path)));
         $new   = array();
@@ -63,7 +66,7 @@ class Path
             }
         }
 
-        return ($win ? '' : "/") . implode("/", $new);
+        return $scheme . implode("/", $new);
     }
 
     public static function getRelative($dir1, $dir2=NULL, $win = false)
