@@ -11,7 +11,7 @@ class PathTest extends \phpunit_framework_testcase
         $this->assertEquals(Path::normalize("/foo/bar/../../foo.txt"), "/foo.txt");
         $this->assertEquals(Path::normalize("/foo/bar/./foo.txt"), "/foo/bar/foo.txt");
         $this->assertEquals(Path::normalize("C:\\cesar\\rodas\\..\\foo.txt"), "C:/cesar/foo.txt");
-        $this->assertEquals(Path::normalize("../phpunit.xml"), realpath(getcwd()  . "/../phpunit.xml"));
+        $this->assertEquals(Path::normalize("tests/../tests/PathTest.php"), __DIR__  . "/PathTest.php");
     }
     public function testPaths()
     {
