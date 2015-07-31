@@ -39,6 +39,33 @@ namespace crodas\FileUtil;
 
 class Path
 {
+    public static function normalize($path)
+    {
+        if (file_exists($path)) {
+            return realpath($path);
+        }
+        $path  = str_replace("\\", "/", trim($path));
+        $abs   = $path[0] == "/";
+        $win   = preg_match("@[A-Z]:/@i", $path);
+        if (!$abs && !$win) {
+            $path = getcwd() . '/' . $path;
+        }
+        $parts = array_values(array_filter(explode("/", $path)));
+        $new   = array();
+        foreach ($parts as $id => $value) {
+            switch ($value) {
+            case '..':
+                array_pop($new);
+            case '.':
+                break;
+            default:
+                $new[] = $value;
+            }
+        }
+
+        return ($win ? '' : "/") . implode("/", $new);
+    }
+
     public static function getRelative($dir1, $dir2=NULL, $win = false)
     {
         if (empty($dir2)) {
@@ -51,8 +78,8 @@ class Path
         }
 
         $file = basename($dir1);
-        $dir1 = trim(realpath(dirname($dir1)), $slash);
-        $dir2 = trim(realpath(dirname($dir2)), $slash);
+        $dir1 = trim(self::normalize(dirname($dir1)), $slash);
+        $dir2 = trim(self::normalize(dirname($dir2)), $slash);
 
         if ($slash == '\\') {
             // F*cking windows ;-)
