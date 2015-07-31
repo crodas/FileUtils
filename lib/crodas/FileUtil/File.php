@@ -136,7 +136,14 @@ class File
             }
         }
 
-        return $dir . sha1(implode("\0", $args));
+        $path = $dir . sha1(implode("\0", $args));
+        
+        if (!is_file($path)) {
+            File::write($path, '');
+        }
+
+
+        return $path;
     }
 
     public static function overrideFilepathGenerator($fnc)

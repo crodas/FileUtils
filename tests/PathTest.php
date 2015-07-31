@@ -6,6 +6,7 @@ class PathTest extends \phpunit_framework_testcase
 {
     public function testRealPath()
     {
+        chdir(__DIR__ . '/../');
         $this->assertEquals(Path::normalize("/foo/bar/../foo.txt"), "/foo/foo.txt");
         $this->assertEquals(Path::normalize("/foo/bar/../../foo.txt"), "/foo.txt");
         $this->assertEquals(Path::normalize("/foo/bar/./foo.txt"), "/foo/bar/foo.txt");
