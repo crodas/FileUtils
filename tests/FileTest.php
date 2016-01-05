@@ -22,6 +22,17 @@ class FileTest extends \phpunit_framework_testcase
         unlink('foobar.php');
     }
 
+    public function testWriteInclude()
+    {
+        $this->assertFalse(is_file('foobarxx.php'));
+        $this->AssertEquals(2, File::writeAndInclude("foobarxxx.php", "<?php return 2;"));
+        $this->AssertEquals(3, File::writeAndInclude("foobarxxx.php", "<?php return 3;"));
+        $this->AssertEquals(4, File::writeAndInclude("foobarxxx.php", "<?php return 4;"));
+        unlink('foobarxxx.php');
+    }
+
+
+
     public function testFilePath()
     {
         $path = File::generateFilepath('activemongo');
