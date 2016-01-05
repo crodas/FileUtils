@@ -1,7 +1,7 @@
 <?php
 /*
   +---------------------------------------------------------------------------------+
-  | Copyright (c) 2014 César Rodas                                                  |
+  | Copyright (c) 2016 César Rodas                                                  |
   +---------------------------------------------------------------------------------+
   | Redistribution and use in source and binary forms, with or without              |
   | modification, are permitted provided that the following conditions are met:     |
@@ -73,6 +73,43 @@ class File
         self::write($path, "<?php return " . dump_array($data) . ';', $perm);
     }
 
+    /**
+     *  Similar to ::write but after writing the file content
+     *  it will include the newest code and return its output.
+     *
+     *  This function solves an HHVM issue that exists requiring
+     *  the same file more than once in the same program runtime.
+     *
+     *  It only works with pure PHP (not with mixed HTML and PHP), and it
+     *  must begin with `<?php`.
+     *
+     *
+     *  @param  string $path    File path
+     *  @param  string $code    Source code
+     *
+     *  @return mixed
+     */
+    public static function writeAndInclude($path, $code)
+    {
+        self::write($path, $code);
+        if (defined('HHVM_VERSION')) {
+            // https://github.com/facebook/hhvm/issues/4797
+            chdir(dirname($path));
+            return eval(substr($code, 5));
+        }
+        return require $path;
+    }
+
+    /**
+     *  Writes a file atomically, using a temporary and then moving
+     *  the file.
+     *
+     *  @param string $path     File path to write
+     *  @param string $content  File content
+     *  @param int    $perm     File permissions (default 0644)
+     *
+     *  @return bool
+     */
     public static function write($path, $content, $perm = 0644)
     {
         $dir = dirname($path);

@@ -1,7 +1,7 @@
 <?php
 /*
   +---------------------------------------------------------------------------------+
-  | Copyright (c) 2014 César Rodas                                                  |
+  | Copyright (c) 2016 César Rodas                                                  |
   +---------------------------------------------------------------------------------+
   | Redistribution and use in source and binary forms, with or without              |
   | modification, are permitted provided that the following conditions are met:     |
@@ -54,6 +54,7 @@ class Cache
     protected $is_listening = false;
 
     protected static $dir = '';
+    protected static $includes = array();
 
     public static function setDirectory($dir)
     {
@@ -89,7 +90,10 @@ class Cache
     public function run($method, Array $args)
     {
         if ($this->content === false) {
-            $this->content = (array)@ include $this->file ;
+            if (empty(self::$includes[$this->file])) {
+                self::$includes[$this->file] = (array)@ include $this->file ;
+            }
+            $this->content = & self::$includes[$this->file];
         }
 
         $name = serialize($args);
