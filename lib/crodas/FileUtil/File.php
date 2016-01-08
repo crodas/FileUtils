@@ -86,12 +86,14 @@ class File
      *
      *  @param  string $path    File path
      *  @param  string $code    Source code
+     *  @param  array  $args    Array of variables to share with the include
      *
      *  @return mixed
      */
-    public static function writeAndInclude($path, $code)
+    public static function writeAndInclude($path, $code, Array $args = array())
     {
         self::write($path, $code);
+        extract($args);
         if (defined('HHVM_VERSION')) {
             // https://github.com/facebook/hhvm/issues/4797
             chdir(dirname($path));
